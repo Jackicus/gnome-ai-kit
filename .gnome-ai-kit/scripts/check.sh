@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # What the kit's CI runs, and what to run before a kit pull request:
 #
-#   scripts/check.sh
+#   .gnome-ai-kit/scripts/check.sh
 #
 # - shellcheck over the kit's scripts and the hook and scripts each extension gets, and
 #   the template's Python compiled;
@@ -9,13 +9,16 @@
 #   when PyYAML is there to say so, and extensions.json lists each extension once, with a
 #   repository, and every listed directory is one the kit ignores;
 # - every backticked kit path in CLAUDE.md, .claude/rules/, the kit's own skills and the
-#   plugin's skills exists (one starting template/, plugin/, .claude-plugin/,
-#   .claude/rules/, scripts/ or .github/; a .github/ path may be the template's).
+#   plugin's skills exists (one starting .gnome-ai-kit/, .claude/rules/ or .github/; a
+#   .github/ path may be the template's).
+#
+# Runs from the kit's root, the folder holding CLAUDE.md and .gnome-ai-kit/.
 #
 # Prints `check: ok` when all pass.
 
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")/.."
+cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+k=.gnome-ai-kit
 
 fail=0
 
@@ -28,8 +31,8 @@ else
     echo "check: shellcheck is not installed (pacman -S shellcheck, or uv for uvx)" >&2
     exit 1
 fi
-"${shellcheck_cmd[@]}" scripts/*.sh template/.claude/kit.sh template/scripts/*.sh || fail=1
-for f in template/scripts/*.py; do
+"${shellcheck_cmd[@]}" "$k"/scripts/*.sh "$k"/template/.claude/kit.sh "$k"/template/scripts/*.sh || fail=1
+for f in "$k"/template/scripts/*.py; do
     PYTHONPYCACHEPREFIX="$(mktemp -d)" python3 -m py_compile "$f" || { echo "check: $f does not compile" >&2; fail=1; }
 done
 
@@ -37,7 +40,7 @@ done
 yaml_python=(python3)
 python3 -c 'import yaml' 2>/dev/null || { command -v uvx >/dev/null && yaml_python=(uvx --quiet --with pyyaml python3); }
 if "${yaml_python[@]}" -c 'import yaml' 2>/dev/null; then
-    for f in .github/workflows/*.yml template/.github/workflows/*.yml; do
+    for f in .github/workflows/*.yml "$k"/template/.github/workflows/*.yml; do
         "${yaml_python[@]}" -c 'import sys, yaml; d = yaml.safe_load(open(sys.argv[1])); assert d.get("jobs"), "no jobs"' "$f" \
             || { echo "check: $f is not a valid workflow" >&2; fail=1; }
     done
@@ -53,8 +56,8 @@ python3 - <<'EOF' || fail=1
 import glob, os, re, sys
 
 docs = ['CLAUDE.md', *glob.glob('.claude/rules/*.md'), *glob.glob('.claude/skills/*/SKILL.md'),
-        *glob.glob('plugin/skills/*/SKILL.md')]
-prefixes = ('template/', 'plugin/', '.claude-plugin/', '.claude/rules/', 'scripts/', '.github/')
+        *glob.glob('.gnome-ai-kit/plugin/skills/*/SKILL.md')]
+prefixes = ('.gnome-ai-kit/', '.claude/rules/', '.github/')
 missing = []
 for doc in docs:
     with open(doc) as f:
@@ -65,7 +68,7 @@ for doc in docs:
         path = token.rstrip('/')
         candidates = [path]
         if path.startswith('.github/'):
-            candidates.append(os.path.join('template', path))
+            candidates.append(os.path.join('.gnome-ai-kit/template', path))
         if not any(os.path.exists(c) for c in candidates):
             missing.append(f'{doc}: `{token}` does not exist')
 for line in missing:
@@ -77,7 +80,7 @@ python3 - <<'EOF' || fail=1
 import json, re, subprocess, sys
 
 problems = []
-extensions = json.load(open('extensions.json'))['extensions']
+extensions = json.load(open('.gnome-ai-kit/extensions.json'))['extensions']
 for key in ('name', 'repo', 'alias'):
     values = [e.get(key) for e in extensions]
     if None in values or '' in values:

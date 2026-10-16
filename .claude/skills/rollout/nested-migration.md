@@ -1,6 +1,6 @@
 # Moving an extension onto the kit's shared scripts
 
-The first rollout of `template/scripts/` replaces an extension's own `./scripts/dev.sh`,
+The first rollout of `.gnome-ai-kit/template/scripts/` replaces an extension's own `./scripts/dev.sh`,
 `./scripts/nested.sh`, `./scripts/nested_driver.py` and `./scripts/dev-extension.js`, and
 adds `./scripts/kit.mk`. What was particular to the extension moves into files of its own,
 which the shared scripts read. One pull request per extension, through the rollout skill's
@@ -30,7 +30,7 @@ steps; this is step 4 for that rollout.
   # extension at real data (a provider's config directory, say).
   EXT_STAND_IN_UNSET=()
   # Development tools this extension's scripts use beyond the kit's, CHECK|PACKAGE|WHAT FOR
-  # (CHECK is cmd:NAME or py:MODULE); the kit's 'scripts/setup.sh --tools' lists the missing.
+  # (CHECK is cmd:NAME or py:MODULE); the kit's '.gnome-ai-kit/scripts/setup.sh --tools' lists the missing.
   EXT_TOOLS=("cmd:vlc|vlc|player" "cmd:ffmpeg|ffmpeg|the test video" "py:evdev|python-evdev|fakepad.py")
   ```
 

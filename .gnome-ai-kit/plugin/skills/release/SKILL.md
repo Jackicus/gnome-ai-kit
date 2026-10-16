@@ -12,7 +12,7 @@ from the kit) checks the tag against `version-name`, runs `make check`, packs th
 `./scripts/dev.sh pack` and publishes the GitHub release with notes from the merged pull
 requests. Nothing is packed or uploaded by hand. The GitHub releases are the changelog.
 
-**The tag is irreversible.** Release tags are protected (`scripts/protect-tags.sh`): once
+**The tag is irreversible.** Release tags are protected (`.gnome-ai-kit/scripts/protect-tags.sh`): once
 pushed, a `v*` tag cannot be moved or deleted, by anyone. A mistake is fixed by the next
 version, never by retagging. The upload to extensions.gnome.org is the owner's: it needs
 their account there, and its review can take days.
@@ -21,7 +21,7 @@ their account there, and its review can take days.
 
 Run `gnome-ext:releases` for the extensions named (`all`: every one). Stop for an extension
 whose `CI` is not green, whose `release run` says `no workflow` (it does not carry
-`release.yml` yet: the kit's `rollout` skill brings it, then `scripts/protect-tags.sh`), or
+`release.yml` yet: the kit's `rollout` skill brings it, then `.gnome-ai-kit/scripts/protect-tags.sh`), or
 that has nothing unreleased. Show the owner the table and the proposed versions.
 
 ## Each extension, one at a time

@@ -4,16 +4,16 @@ description: Show where every GNOME Shell extension beside the kit stands on rel
 argument-hint: "[names or aliases; default every extension in extensions.json] [--prs]"
 ---
 
-Release state of: $ARGUMENTS (nothing given: every extension `extensions.json` lists)
+Release state of: $ARGUMENTS (nothing given: every extension `.gnome-ai-kit/extensions.json` lists)
 
 This reads GitHub and extensions.gnome.org and changes nothing. It is what
 `gnome-ext:release` runs first.
 
-1. Run the kit's `scripts/releases.sh` with the arguments: `../scripts/releases.sh` from an
-   extension, `scripts/releases.sh` from the kit; add `--prs` to list the unreleased pull
+1. Run the kit's `.gnome-ai-kit/scripts/releases.sh` with the arguments: `../.gnome-ai-kit/scripts/releases.sh` from an
+   extension, `.gnome-ai-kit/scripts/releases.sh` from the kit; add `--prs` to list the unreleased pull
    requests, `--json` to work with the data. It needs `gh` signed in and the network; in a
    session with no kit beside the repository (a cloud session), run it from the copy
-   `.claude/kit.sh` fetched (`~/.cache/gnome-extensions-kit/scripts/releases.sh`).
+   `.claude/kit.sh` fetched (`~/.cache/gnome-extensions-kit/.gnome-ai-kit/scripts/releases.sh`).
 2. Read the table back, one line per extension:
    - **version**: `version-name` in `src/metadata.json` on `main`.
    - **last tag**: the newest `v*` tag and its date; `none` means never released.

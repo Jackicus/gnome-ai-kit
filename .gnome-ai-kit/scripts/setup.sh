@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Once per machine: makes the kit's gnome-ext plugin available to Claude Code.
 #
-#   scripts/setup.sh           the plugin, then the tools check below
-#   scripts/setup.sh --tools   only the tools check
+#   .gnome-ai-kit/scripts/setup.sh           the plugin, then the tools check below
+#   .gnome-ai-kit/scripts/setup.sh --tools   only the tools check
 #
-# Registers this folder as the `gnome-extensions` plugin marketplace (a directory source,
+# Registers .gnome-ai-kit/ as the `gnome-extensions` plugin marketplace (a directory source,
 # so skills are read from here live and a pull is all an update takes), installs the
 # `gnome-ext` plugin, and leaves it switched off at user level: each extension's
 # .claude/settings.json switches it on (`enabledPlugins`), so it is there in the
@@ -19,6 +19,7 @@
 set -euo pipefail
 
 kit=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+root=$(dirname "$kit")
 
 KIT_TOOLS=(
     "cmd:git|git|everything"
@@ -40,7 +41,7 @@ missing_tools() {
     local entry check pkg why name ext conf seen=" "
     local -a tools=("${KIT_TOOLS[@]/#/kit|}")
     for name in $(python3 -c 'import json,sys; print(" ".join(e["name"] for e in json.load(open(sys.argv[1]))["extensions"]))' "$kit/extensions.json"); do
-        conf="$kit/$name/scripts/ext.conf"
+        conf="$root/$name/scripts/ext.conf"
         [ -f "$conf" ] || continue
         while IFS= read -r entry; do
             [ -n "$entry" ] && tools+=("$name|$entry")
@@ -84,9 +85,12 @@ if [ ! -x "$claude" ]; then
     exit 1
 fi
 
-if "$claude" plugin marketplace list 2>/dev/null | grep -q 'gnome-extensions'; then
+marketplaces=$("$claude" plugin marketplace list 2>/dev/null || true)
+if grep -qF "($kit)" <<< "$marketplaces"; then
     echo "Marketplace gnome-extensions: already registered"
 else
+    # Registered from another folder (the kit before .gnome-ai-kit/, or another clone).
+    grep -q 'gnome-extensions' <<< "$marketplaces" && "$claude" plugin marketplace remove gnome-extensions
     "$claude" plugin marketplace add "$kit"
 fi
 

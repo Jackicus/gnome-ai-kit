@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Where every extension stands on releases, read from GitHub and extensions.gnome.org:
 #
-#   scripts/releases.sh [--json] [--prs] [NAME|ALIAS...]
+#   .gnome-ai-kit/scripts/releases.sh [--json] [--prs] [NAME|ALIAS...]
 #
 # Per extension: version-name on main, the last v* tag and its date, the pull requests
 # merged since it, main's CI, the last Release workflow run, what extensions.gnome.org

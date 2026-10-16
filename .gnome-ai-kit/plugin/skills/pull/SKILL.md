@@ -6,16 +6,16 @@ argument-hint: "[all | names or aliases: ai-usage library media wallpaper]"
 
 Pull: $ARGUMENTS (nothing given, or `all`: the kit and every extension)
 
-The kit lists its extensions in `extensions.json` (directory, GitHub repository, alias),
-and `scripts/pull.sh` does the work. Sessions already start up to date: an extension's
+The kit lists its extensions in `.gnome-ai-kit/extensions.json` (directory, GitHub repository, alias),
+and `.gnome-ai-kit/scripts/pull.sh` does the work. Sessions already start up to date: an extension's
 `.claude/kit.sh` pulls the kit and that extension, and pulls the others in the
 background; a session in the kit folder pulls everything. This skill is for the rest of
 the time, and for reading what was left alone.
 
 1. Find the kit: the folder above an extension, or the session's own folder when it is
-   the kit (its `extensions.json` is there). With no kit beside the session (a cloud
+   the kit (its `.gnome-ai-kit/extensions.json` is there). With no kit beside the session (a cloud
    session, a lone clone), there is nothing to pull: say so and stop.
-2. Run `<kit>/scripts/pull.sh` with the names or aliases given (none for all). It
+2. Run `<kit>/.gnome-ai-kit/scripts/pull.sh` with the names or aliases given (none for all). It
    fetches every repository, clones a missing one beside the kit, and fast-forwards only
    a `main` that is checked out and clean. It never stashes, resets, switches or deletes.
 3. Read its summary back in a short table: each repository and what happened (up to
@@ -34,6 +34,6 @@ the time, and for reading what was left alone.
      with the user's OK) and land them as a pull request;
    - **diverged**: show both sides (`git log --oneline main...origin/main`) and ask;
    - **a fetch or clone failed**: usually offline or a lapsed `gh` login; say which.
-5. If `extensions.json` lacks an extension the user names, it is not in the kit yet:
-   adding it is a kit pull request (`extensions.json`, then `gnome-ext:doctor` in the
+5. If `.gnome-ai-kit/extensions.json` lacks an extension the user names, it is not in the kit yet:
+   adding it is a kit pull request (`.gnome-ai-kit/extensions.json`, then `gnome-ext:doctor` in the
    new repository).

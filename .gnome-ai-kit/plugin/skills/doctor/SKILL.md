@@ -15,8 +15,8 @@ the report at the end says what each found.
 - Read the kit: its CLAUDE.md, every file in its `.claude/rules/`, and this plugin's
   `nested-shell` skill. The kit is the folder above the repository (or the cache path
   `.claude/kit.sh` prints). What they say is what the repository must **not** repeat.
-- The repository is listed in the kit's `extensions.json` (adding it is a kit pull
-  request), and `scripts/pull.sh <alias>` from the kit leaves it up to date on a clean
+- The repository is listed in the kit's `.gnome-ai-kit/extensions.json` (adding it is a kit pull
+  request), and `.gnome-ai-kit/scripts/pull.sh <alias>` from the kit leaves it up to date on a clean
   `main`. `gh issue create` an issue: "Adopt the
   GNOME-EXTENSIONS kit: true and short instructions, make check in CI, protected main",
   and a branch `chore/kit-doctor`.
@@ -56,7 +56,7 @@ extension, and that the kit lacks, goes in the report for the kit, not here.
 ## 3. CLAUDE.md at most 200 lines, rules split out
 
 - The **first line after the title** is the kit pointer, copied from
-  `template/CLAUDE.pointer.md` in the kit.
+  `.gnome-ai-kit/template/CLAUDE.pointer.md` in the kit.
 - CLAUDE.md keeps: what the extension is (UUID, what it does, versions), its layout, how
   its parts fit, its design rules and the traps that are its own, its `make check` and
   anything the landing loop needs that is particular to it.
@@ -95,7 +95,7 @@ extension, and that the kit lacks, goes in the report for the kit, not here.
   prints nothing (a repository that ignored all of `.claude/` would never commit them;
   ignore `.claude/worktrees/` or `.claude/settings.local.json` instead). `sync.sh` refuses
   such a repository.
-- Run the kit's `scripts/sync.sh <this repository>`. It copies the workflows, the issue
+- Run the kit's `.gnome-ai-kit/scripts/sync.sh <this repository>`. It copies the workflows, the issue
   forms and pull request template, `CONTRIBUTING.md`, `.claude/kit.sh`,
   `eslint.config.mjs` and the shared scripts (`./scripts/dev.sh`, `./scripts/nested.sh`,
   `./scripts/nested_driver.py`, `./scripts/dev-extension.js`, `./scripts/kit.mk`), and
@@ -138,10 +138,10 @@ EOF
 gh api repos/$R/branches/main/protection --jq '.required_status_checks.contexts, .enforce_admins.enabled'
 ```
 
-Release tags are permanent: the kit's `scripts/protect-tags.sh <repo>` creates (or
+Release tags are permanent: the kit's `.gnome-ai-kit/scripts/protect-tags.sh <repo>` creates (or
 updates) the "Release tags" ruleset, which refuses moving or deleting a `v*` tag. Check it
 with `gh api repos/$R/rulesets --jq '.[].name'`. `release.yml` itself must have arrived
-with the sync: `scripts/releases.sh <repo>` shows `release run` as `never run` or a
+with the sync: `.gnome-ai-kit/scripts/releases.sh <repo>` shows `release run` as `never run` or a
 result, not `no workflow`.
 
 ## 8. Report

@@ -1,8 +1,5 @@
 # The extensions are git repositories of their own, checked out beside the kit's files.
 /*/
 !/.claude/
-!/.claude-plugin/
 !/.github/
-!/plugin/
-!/scripts/
-!/template/
+!/.gnome-ai-kit/

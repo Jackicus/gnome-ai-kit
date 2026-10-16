@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Brings the kit and the extensions it lists in extensions.json up to date.
 #
-#   scripts/pull.sh [--quiet] [--no-kit] [--skip NAME] [NAME|ALIAS...]
+#   .gnome-ai-kit/scripts/pull.sh [--quiet] [--no-kit] [--skip NAME] [NAME|ALIAS...]
 #
 # The kit first, then every extension (or those named, by directory name or alias:
 # ai-usage, library, media, wallpaper), in parallel:
@@ -20,6 +20,7 @@
 set -uo pipefail
 
 kit=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+root=$(dirname "$kit")
 quiet=0
 pull_kit=1
 skip=
@@ -143,11 +144,11 @@ update() {
 
 labels=()
 if [ $pull_kit -eq 1 ]; then
-    update "$kit" kit ""
+    update "$root" kit ""
     labels+=(kit)
 fi
 for i in "${!names[@]}"; do
-    update "$kit/${names[$i]}" "${names[$i]}" "${repos[$i]}" &
+    update "$root/${names[$i]}" "${names[$i]}" "${repos[$i]}" &
     labels+=("${names[$i]}")
 done
 wait

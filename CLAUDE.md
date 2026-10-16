@@ -1,14 +1,18 @@
 # GNOME Extensions
 
-This folder is the **kit**: shared rules, skills and templates for the GNOME Shell extensions
-checked out beside it, one git repository each (`GNOME-AI-Usage`, `GNOME-GitHub-Bar`,
-`GNOME-Library-Menu`, `GNOME-Media-Controls`, `GNOME-SongRec-Button`, `GNOME-Wallpaper-FX`, `GNOME-Workspace-Titles`). The kit is a repository
-of its own (Jackicus/GNOME-EXTENSIONS) that ignores them and lists them in `extensions.json`;
-`scripts/pull.sh` clones and fast-forwards them, and every session starts with the kit and
-its own repository pulled (`.claude/kit.sh`). A session started in an extension
-loads this file and `.claude/rules/` from here, then the extension's own CLAUDE.md, which
-says what that extension is and what is true only of it. When the two disagree, the
-extension's file is the more specific and wins; fix whichever is wrong.
+This folder is the **kit**: shared rules, skills and templates for the GNOME Shell
+extensions checked out beside it, one git repository each (`GNOME-AI-Usage`,
+`GNOME-GitHub-Bar`, `GNOME-Library-Menu`, `GNOME-Media-Controls`, `GNOME-SongRec-Button`,
+`GNOME-Wallpaper-FX`, `GNOME-Workspace-Titles`). The kit is a repository of its own
+(Jackicus/GNOME-EXTENSIONS) that ignores them. Its root holds only this file, `.claude/`
+(the rules and the kit's own skills), `.github/` and `.gitignore`; everything else of the
+kit is in `.gnome-ai-kit/`: the scripts, the template, the plugin and
+`.gnome-ai-kit/extensions.json`, which lists the extensions.
+`.gnome-ai-kit/scripts/pull.sh` clones and fast-forwards them, and every session starts
+with the kit and its own repository pulled (`.claude/kit.sh`). A session started in an
+extension loads this file and `.claude/rules/` from here, then the extension's own
+CLAUDE.md, which says what that extension is and what is true only of it. When the two
+disagree, the extension's file is the more specific and wins; fix whichever is wrong.
 
 ## The stack
 
@@ -26,13 +30,14 @@ extension's file is the more specific and wins; fix whichever is wrong.
   `./scripts/dev-extension.js`, which stages `lib/` afresh per edit, under a directory of
   the running shell's own, so `reload` picks up edits and one shell never deletes
   another's stage.
-- The tooling is the kit's, the same in every repository (`template/scripts/`, copied by
-  `scripts/sync.sh`): `./scripts/dev.sh` for the extension (link, install, reload, logs,
-  pack, check, status), `./scripts/nested.sh` for the nested shell, and the make targets
-  in `./scripts/kit.mk`, which the Makefile includes. What is particular to an extension
-  is `./scripts/ext.conf` (its UUID, name, log prefix, what ships, its checks) and its own
-  commands and hooks in `./scripts/dev.d/` and `./scripts/nested.d/`; a change to the
-  shared scripts goes to the kit.
+- The tooling is the kit's, the same in every repository
+  (`.gnome-ai-kit/template/scripts/`, copied by `.gnome-ai-kit/scripts/sync.sh`):
+  `./scripts/dev.sh` for the extension (link, install, reload, logs, pack, check, status),
+  `./scripts/nested.sh` for the nested shell, and the make targets in `./scripts/kit.mk`,
+  which the Makefile includes. What is particular to an extension is `./scripts/ext.conf`
+  (its UUID, name, log prefix, what ships, its checks) and its own commands and hooks in
+  `./scripts/dev.d/` and `./scripts/nested.d/`; a change to the shared scripts goes to the
+  kit.
 - Settings are a GSettings schema in `src/schemas/`, `org.gnome.shell.extensions.<name>`.
   `glib-compile-schemas --strict` must pass: an install compiles it that way.
 
@@ -61,7 +66,7 @@ sessions and agents running side by side share the scratchpad, and overwrite gen
 ## Style
 
 - `make lint` is ESLint with gjs.guide's configuration (`eslint.config.mjs`, the same in
-  every repo: `template/eslint.config.mjs`). No errors, and no new warnings.
+  every repo: `.gnome-ai-kit/template/eslint.config.mjs`). No errors, and no new warnings.
 - 4-space indents, `const` and `let`, `console.*` for logging behind the extension's own
   `[Name]` prefix, which `make logs` filters on (`make logs SINCE='5 min ago'` for a
   window). The shipped code logs failures only.
@@ -107,7 +112,7 @@ extension moves here, in a kit pull request, and leaves the extensions' files.
 
 - `CLAUDE.md`, at most 200 lines: what the extension is, its layout, how its parts fit,
   its design rules and the traps that are its alone. It starts with the kit pointer line
-  (`template/CLAUDE.pointer.md`).
+  (`.gnome-ai-kit/template/CLAUDE.pointer.md`).
 - `.claude/rules/<area>.md` with `paths:` frontmatter, for an area's detail that only
   matters while its files are open (the scanner, the shaders, a VLC socket).
 - `.claude/skills/drive-extension/SKILL.md`: what this extension looks like in the nested
@@ -117,14 +122,15 @@ extension moves here, in a kit pull request, and leaves the extensions' files.
 - `.claude/commands/` (`/logs`, `/reload`, `/status`, `/preview`, …): per repo, since each
   names its own log line, its own healthy state and its own data.
 - `.claude/settings.json`: the kit's SessionStart and SessionEnd hooks and plugin, merged
-  in by `scripts/sync.sh`.
+  in by `.gnome-ai-kit/scripts/sync.sh`.
 - `./scripts/ext.conf`, `./scripts/dev.d/`, `./scripts/nested.d/` and the Makefile's own
   targets after `include scripts/kit.mk`.
 
 ## Skills from the kit
 
-The `gnome-ext` plugin (`plugin/`) is enabled in each extension's settings and installed
-once per machine by `scripts/setup.sh`: `gnome-ext:fix-bug`, `gnome-ext:review-pass`,
+The `gnome-ext` plugin (`.gnome-ai-kit/plugin/`, its marketplace
+`.gnome-ai-kit/.claude-plugin/`) is enabled in each extension's settings and installed once
+per machine by `.gnome-ai-kit/scripts/setup.sh`: `gnome-ext:fix-bug`, `gnome-ext:review-pass`,
 `gnome-ext:nested-shell`, `gnome-ext:release`, `gnome-ext:doctor`,
 `gnome-ext:screenshots` (published shots, stand-in data only), `gnome-ext:ego-review`
 (the extensions.gnome.org review, before any upload), `gnome-ext:port-shell-version`,
@@ -140,22 +146,23 @@ skills are on disk, to be read as playbooks.
 
 ## Working on the kit
 
-The kit goes through the same loop: issue, branch, `scripts/check.sh` (what the kit's CI
-runs), pull request, green CI, squash merge. The kit folder is one checkout every session
+The kit goes through the same loop: issue, branch, `.gnome-ai-kit/scripts/check.sh` (what
+the kit's CI runs), pull request, green CI, squash merge. The kit folder is one checkout every session
 shares, so a kit branch lives in a worktree of its own (`git worktree add`), never by
 switching the folder's branch. Then:
 
-- after a change under `template/` or `scripts/sync.sh`, once it is merged, the kit's own
-  `rollout` skill (`.claude/skills/rollout/`, loaded only in a session started here)
-  lands it in each extension through its own pull request; `scripts/sync.sh --check`
-  lists what differs;
+- after a change under `.gnome-ai-kit/template/` or `.gnome-ai-kit/scripts/sync.sh`, once
+  it is merged, the kit's own `rollout` skill (`.claude/skills/rollout/`, loaded only in a
+  session started here) lands it in each extension through its own pull request;
+  `.gnome-ai-kit/scripts/sync.sh --check` lists what differs;
 - a new extension starts with the kit's own `new-extension` skill
-  (`scripts/new-extension.sh` over `template/skeleton/`), never by copying a sibling;
-- after a change under `plugin/`, nothing: the plugin is read from this folder, so the
-  next session sees it. Bump `plugin/.claude-plugin/plugin.json`'s version when a skill's
-  meaning changes.
+  (`.gnome-ai-kit/scripts/new-extension.sh` over `.gnome-ai-kit/template/skeleton/`), never
+  by copying a sibling;
+- after a change under `.gnome-ai-kit/plugin/`, nothing: the plugin is read from this
+  folder, so the next session sees it. Bump `.gnome-ai-kit/plugin/.claude-plugin/plugin.json`'s
+  version when a skill's meaning changes.
 
-`scripts/check.sh` checks that every backticked path in this file, the rules and the
-skills that starts `template/`, `plugin/`, `.claude-plugin/`, `.claude/rules/`, `scripts/`
-or `.github/` exists in the kit (a `.github/` path in `template/` counts). An extension's
+`.gnome-ai-kit/scripts/check.sh` checks that every backticked path in this file, the rules
+and the skills that starts `.gnome-ai-kit/`, `.claude/rules/` or `.github/` exists in the
+kit (a `.github/` path in `.gnome-ai-kit/template/` counts). An extension's
 own scripts are therefore written `./scripts/…`.
