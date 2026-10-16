@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Scaffolds a new extension beside the kit, ready for its first commit.
 #
-#   scripts/new-extension.sh NAME SLUG DESCRIPTION [DIR]
+#   .gnome-ai-kit/scripts/new-extension.sh NAME SLUG DESCRIPTION [DIR]
 #
 #   NAME         what people read: "Clipboard Peek"
 #   SLUG         the UUID before @jackicus, lower case and hyphens: clipboard-peek
@@ -18,11 +18,12 @@
 set -euo pipefail
 
 kit=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+root=$(dirname "$kit")
 [ $# -ge 3 ] || { sed -n '2,/^$/p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
 name=$1 slug=$2 description=$3
 [[ $slug =~ ^[a-z][a-z0-9]*(-[a-z0-9]+)*$ ]] || { echo "new-extension.sh: SLUG is lower case words joined by hyphens: $slug" >&2; exit 2; }
 repo="GNOME-$(tr ' ' '-' <<<"$name")"
-dir=${4:-$kit/$repo}
+dir=${4:-$root/$repo}
 class=$(sed -E 's/[^A-Za-z0-9 ]//g; s/(^| )([a-z])/\1\u\2/g; s/ //g' <<<"$name")
 [ -e "$dir" ] && { echo "new-extension.sh: $dir exists" >&2; exit 1; }
 [[ $name =~ ^[A-Za-z0-9]+( [A-Za-z0-9]+)*$ ]] || { echo "new-extension.sh: NAME is words of letters and digits: $name" >&2; exit 2; }

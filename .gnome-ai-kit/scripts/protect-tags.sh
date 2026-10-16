@@ -3,7 +3,7 @@
 # refs/tags/v* that refuses deleting, moving or force-pushing such a tag, with nobody
 # allowed to bypass it. Creating a tag stays allowed, so a release is still a pushed tag.
 #
-#   scripts/protect-tags.sh [NAME|ALIAS|OWNER/REPO...]
+#   .gnome-ai-kit/scripts/protect-tags.sh [NAME|ALIAS|OWNER/REPO...]
 #
 # By default every extension extensions.json lists. Running it again updates the ruleset
 # in place. Run it for an extension once release.yml has reached it (the rollout skill

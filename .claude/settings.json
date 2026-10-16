@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/pull.sh --quiet || true",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.gnome-ai-kit/scripts/pull.sh --quiet || true",
             "timeout": 45
           }
         ]

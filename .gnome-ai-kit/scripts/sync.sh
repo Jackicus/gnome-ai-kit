@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copies the kit's per-repository files into the extensions beside it.
 #
-#   scripts/sync.sh [--check] [REPO...]
+#   .gnome-ai-kit/scripts/sync.sh [--check] [REPO...]
 #
 # REPO is an extension's directory name or alias from extensions.json (GNOME-Media-Controls,
 # media) or a path; by default every extension extensions.json lists that is checked out
@@ -36,6 +36,7 @@
 set -euo pipefail
 
 kit=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+root=$(dirname "$kit")
 template=$kit/template
 check=0
 repos=()
@@ -58,10 +59,10 @@ for e in json.load(open(sys.argv[1]))["extensions"]:
 
 if [ ${#repos[@]} -eq 0 ]; then
     while read -r name _; do
-        if [ -e "$kit/$name/.git" ]; then
-            repos+=("$kit/$name")
+        if [ -e "$root/$name/.git" ]; then
+            repos+=("$root/$name")
         else
-            echo "$name: not checked out beside the kit (scripts/pull.sh $name clones it)"
+            echo "$name: not checked out beside the kit (.gnome-ai-kit/scripts/pull.sh $name clones it)"
         fi
     done <<< "$manifest"
 else
@@ -119,7 +120,7 @@ EOF
 }
 
 for repo in "${repos[@]}"; do
-    [ -d "$repo" ] || repo=$kit/$repo
+    [ -d "$repo" ] || repo=$root/$repo
     if [ ! -e "$repo/.git" ]; then
         echo "sync.sh: $repo is not a git repository" >&2
         status=1
@@ -173,7 +174,7 @@ for repo in "${repos[@]}"; do
         [ $check -eq 1 ] && status=1
     fi
     if [ $missing_pointer -eq 1 ]; then
-        echo "$name: CLAUDE.md lacks the kit pointer line (template/CLAUDE.pointer.md): add it by hand"
+        echo "$name: CLAUDE.md lacks the kit pointer line (.gnome-ai-kit/template/CLAUDE.pointer.md): add it by hand"
         [ $check -eq 1 ] && status=1
     fi
     if [ ${#changed[@]} -eq 0 ]; then

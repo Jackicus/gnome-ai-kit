@@ -13,13 +13,13 @@ description was not given; the repository is `Jackicus/GNOME-<NAME with hyphens>
 public repository is outward-facing: confirm the three with the owner once, then go through
 to the end without stopping.
 
-1. **Scaffold.** `scripts/new-extension.sh "NAME" SLUG "DESCRIPTION"` makes
-   `GNOME-<Name>/` beside the kit from `template/skeleton/`: an extension that puts an icon
+1. **Scaffold.** `.gnome-ai-kit/scripts/new-extension.sh "NAME" SLUG "DESCRIPTION"` makes
+   `GNOME-<Name>/` beside the kit from `.gnome-ai-kit/template/skeleton/`: an extension that puts an icon
    in the top bar behind one setting (`show-indicator`), its preferences (an
    `Adw.SwitchRow` bound to the key), schema, `lib/app.js` (`<Class>App`, everything made
    in `enable()` and undone in `disable()`; its GObject class is `<Class>Indicator`, with
    no `GTypeName`), `./scripts/ext.conf`, a Makefile on `./scripts/kit.mk`, CLAUDE.md with the kit
-   pointer, README, LICENSE (GPL-2.0-or-later); then `scripts/sync.sh` over it and
+   pointer, README, LICENSE (GPL-2.0-or-later); then `.gnome-ai-kit/scripts/sync.sh` over it and
    `package-lock.json`. Nothing is committed.
 2. **Check it.** In the new directory: `make check` passes and `./scripts/dev.sh pack`
    ships exactly `extension.js`, `prefs.js`, `metadata.json`, the schema XML, `lib/*.js`
@@ -42,12 +42,12 @@ to the end without stopping.
 5. **Protect.** Wait for the `make check` job on `main` (`gh run watch`); once it is green,
    protect `main` as every extension's is: required check `make check`, admins included,
    no force pushes or deletions (the `gh api -X PUT …/branches/main/protection` call in
-   `gnome-ext:doctor`). Then `scripts/protect-tags.sh Jackicus/<repo>` for the `v*` tag
+   `gnome-ext:doctor`). Then `.gnome-ai-kit/scripts/protect-tags.sh Jackicus/<repo>` for the `v*` tag
    ruleset.
-6. **List it.** A kit pull request adding `{"name", "repo", "alias"}` to `extensions.json`
+6. **List it.** A kit pull request adding `{"name", "repo", "alias"}` to `.gnome-ai-kit/extensions.json`
    (through the kit's loop, in a worktree of its own). From then on `pull.sh`, `sync.sh`,
    `releases.sh` and the rollout include it.
-7. **Hand over.** The repository URL; that `scripts/setup.sh --tools` lists anything the
+7. **Hand over.** The repository URL; that `.gnome-ai-kit/scripts/setup.sh --tools` lists anything the
    machine lacks; and the owner's own step to run it in their session: log out and back in
    (the link from step 3 is already in place), then `gnome-extensions enable SLUG@jackicus`.
    A first release is `/gnome-ext:release` when they say so.
