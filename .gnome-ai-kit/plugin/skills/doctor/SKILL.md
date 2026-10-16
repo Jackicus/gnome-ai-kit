@@ -1,6 +1,6 @@
 ---
 name: doctor
-description: Audit one GNOME Shell extension repository against the GNOME-EXTENSIONS kit's standard and bring it up to it - CLAUDE.md checked against the code and trimmed to 200 lines, area rules split out, what the kit already says removed, make check and CI, settings.json hooks and plugin, the kit pointer line, repository settings and branch protection - landed as one pull request. Use when asked to doctor, audit or onboard an extension.
+description: Audit one GNOME Shell extension repository against gnome-ai-kit's standard and bring it up to it - CLAUDE.md checked against the code and trimmed to 200 lines, area rules split out, what the kit already says removed, make check and CI, settings.json hooks and plugin, the kit pointer line, repository settings and branch protection - landed as one pull request. Use when asked to doctor, audit or onboard an extension.
 argument-hint: "[path to the extension repository; default the current one]"
 ---
 
@@ -18,7 +18,7 @@ the report at the end says what each found.
 - The repository is listed in the kit's `.gnome-ai-kit/extensions.json` (adding it is a kit pull
   request), and `.gnome-ai-kit/scripts/pull.sh <alias>` from the kit leaves it up to date on a clean
   `main`. `gh issue create` an issue: "Adopt the
-  GNOME-EXTENSIONS kit: true and short instructions, make check in CI, protected main",
+  gnome-ai-kit: true and short instructions, make check in CI, protected main",
   and a branch `chore/kit-doctor`.
 - Do not start a nested shell for this unless a claim cannot be checked any other way;
   if you must, use `--clean` and `stop` it. Never touch another repository.

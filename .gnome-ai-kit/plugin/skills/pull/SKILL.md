@@ -1,6 +1,6 @@
 ---
 name: pull
-description: Bring the GNOME-EXTENSIONS kit and the extensions it lists up to date - clone the ones missing, fast-forward each clean main, and say what was left alone and why (a branch, uncommitted work, unpushed or diverged commits, a merged branch whose remote is gone). Use when asked to pull, update, sync or refresh the extensions, to set up a machine, or before work that spans several of them.
+description: Bring gnome-ai-kit and the extensions it lists up to date - clone the ones missing, fast-forward each clean main, and say what was left alone and why (a branch, uncommitted work, unpushed or diverged commits, a merged branch whose remote is gone). Use when asked to pull, update, sync or refresh the extensions, to set up a machine, or before work that spans several of them.
 argument-hint: "[all | names or aliases: ai-usage library media wallpaper]"
 ---
 

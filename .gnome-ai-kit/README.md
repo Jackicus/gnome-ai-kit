@@ -6,7 +6,7 @@ ignores them (`.gitignore`) and holds only what they share, so a rule is written
 cannot drift between five copies.
 
 ```
-GNOME-EXTENSIONS/                  this repository: Jackicus/GNOME-EXTENSIONS
+gnome-ai-kit/                      this repository: Jackicus/gnome-ai-kit
 ├── CLAUDE.md                      rules for every extension session (loaded automatically)
 ├── .claude/rules/                 the same, by topic: live-session.md, gjs-st.md,
 │                                  simplicity.md
@@ -76,7 +76,7 @@ from (`.gnome-ai-kit/template/CLAUDE.pointer.md`).
 ## A new machine
 
 ```bash
-git clone https://github.com/Jackicus/GNOME-EXTENSIONS.git && cd GNOME-EXTENSIONS && .gnome-ai-kit/scripts/pull.sh && .gnome-ai-kit/scripts/setup.sh
+git clone https://github.com/Jackicus/gnome-ai-kit.git && cd gnome-ai-kit && .gnome-ai-kit/scripts/pull.sh && .gnome-ai-kit/scripts/setup.sh
 ```
 
 `pull.sh` clones every extension `.gnome-ai-kit/extensions.json` lists beside the kit.
