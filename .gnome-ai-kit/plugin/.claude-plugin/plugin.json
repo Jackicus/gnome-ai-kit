@@ -1,10 +1,10 @@
 {
   "name": "gnome-ext",
-  "version": "0.6.0",
-  "description": "Skills shared by the GNOME Shell extensions beside the GNOME-EXTENSIONS kit: fix-bug, review-pass, nested-shell, release, doctor, screenshots, ego-review, port-shell-version, hig-polish, readme, pull, releases, simplify-pass",
+  "version": "0.6.1",
+  "description": "Skills shared by the GNOME Shell extensions beside gnome-ai-kit: fix-bug, review-pass, nested-shell, release, doctor, screenshots, ego-review, port-shell-version, hig-polish, readme, pull, releases, simplify-pass",
   "author": {
     "name": "Jackicus"
   },
-  "repository": "https://github.com/Jackicus/GNOME-EXTENSIONS",
+  "repository": "https://github.com/Jackicus/gnome-ai-kit",
   "license": "GPL-2.0-or-later"
 }
