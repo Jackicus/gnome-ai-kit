@@ -41,6 +41,7 @@ gnome-ai-kit/                      this repository: Jackicus/gnome-ai-kit
 ├── GNOME-Media-Controls/
 ├── GNOME-SongRec-Button/
 ├── GNOME-Wallpaper-FX/
+├── GNOME-Workspace-Scenes/
 └── GNOME-Workspace-Titles/
 ```
 
