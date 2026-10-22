@@ -3,8 +3,8 @@
 This folder is the **kit**: shared rules, skills and templates for the GNOME Shell
 extensions checked out beside it, one git repository each (`GNOME-AI-Usage`,
 `GNOME-GitHub-Bar`, `GNOME-Library-Menu`, `GNOME-Media-Controls`, `GNOME-SongRec-Button`,
-`GNOME-Wallpaper-FX`, `GNOME-Workspace-Titles`). The kit is a repository of its own
-(Jackicus/gnome-ai-kit) that ignores them. Its root holds only this file, `.claude/`
+`GNOME-Wallpaper-FX`, `GNOME-Workspace-Scenes`, `GNOME-Workspace-Titles`). The kit is a
+repository of its own (Jackicus/gnome-ai-kit) that ignores them. Its root holds only this file, `.claude/`
 (the rules and the kit's own skills), `.github/` and `.gitignore`; everything else of the
 kit is in `.gnome-ai-kit/`: the scripts, the template, the plugin and
 `.gnome-ai-kit/extensions.json`, which lists the extensions.
