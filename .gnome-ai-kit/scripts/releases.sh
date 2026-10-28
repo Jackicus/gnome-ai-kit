@@ -5,7 +5,7 @@
 #
 # Per extension: version-name on main, the last v* tag and its date, the pull requests
 # merged since it, main's CI, the last Release workflow run, what extensions.gnome.org
-# carries for GNOME Shell 50, and the version to cut next (any feat/ pull request since
+# carries for GNOME Shell 51, and the version to cut next (any feat/ pull request since
 # the tag: minor; otherwise a patch; never released: version-name as it is). Then the
 # warnings. --prs lists the unreleased pull requests' titles; --json prints it all as JSON.
 # Reads only; never tags, releases or changes anything.
@@ -33,7 +33,7 @@ if wanted:
         sys.exit(f'releases.sh: not in extensions.json: {" ".join(unknown)}')
     extensions = [e for e in extensions if e['name'] in wanted or e['alias'] in wanted]
 
-SHELL = '50'
+SHELL = '51'
 
 
 def gh(*args):

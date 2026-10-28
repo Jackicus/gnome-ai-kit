@@ -3,7 +3,7 @@
   "name": "@NAME@",
   "description": "@DESCRIPTION@",
   "settings-schema": "org.gnome.shell.extensions.@SLUG@",
-  "shell-version": [ "50" ],
+  "shell-version": [ "51" ],
   "url": "https://github.com/Jackicus/@REPO@",
   "version-name": "0.1"
 }

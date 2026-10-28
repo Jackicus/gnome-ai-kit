@@ -16,9 +16,10 @@ disagree, the extension's file is the more specific and wins; fix whichever is w
 
 ## The stack
 
-- GJS with ES modules, GNOME Shell 50. Every `metadata.json` claims `["50"]`, the version
-  each has been run on; some are audited against 48 and 49's sources and say so in their
-  own CLAUDE.md. A version is claimed only once it has been booted.
+- GJS with ES modules, GNOME Shell 51. Every `metadata.json` claims `["51"]`, the version
+  each has been run on. A version is claimed only once it has been booted, and `main`
+  claims only what boots on the user's machines: users of an older shell keep the last
+  release made for it, and no code detects versions.
 - Two processes, two toolkits. `extension.js` and everything it imports run **inside the
   compositor**: St, Clutter, Meta, Shell, `resource:///org/gnome/shell/…`. `prefs.js` runs
   in the Extensions app's process: Gtk 4 and libadwaita, never St, Clutter, Meta, Shell
@@ -44,10 +45,12 @@ disagree, the extension's file is the more specific and wins; fix whichever is w
 ## Two machines
 
 The user works on two, and a session may be on either: the main desktop (NVIDIA GTX 1080)
-and an Intel HP all-in-one (Mesa). Both run GNOME Shell 50. Support is claimed per major
-version ("GNOME Shell 50"), for every machine; a point release a doc mentions is fine
-and is not policed. A performance measurement (frame times, CPU, GPU) says which machine
-it was taken on, and an audit never "corrects" one machine's numbers to the other's.
+and an Intel HP all-in-one (Mesa). The desktop runs GNOME Shell 51, which the extensions
+target; the all-in-one has not been checked on 51 yet, and is the next time it is used.
+Support is claimed per major version ("GNOME Shell 51"); a point release a doc mentions
+is fine and is not policed. A performance measurement (frame times, CPU, GPU) says which
+machine it was taken on, and an audit never "corrects" one machine's numbers to the
+other's.
 Which one this is: `gnome-shell --version`, `lspci | grep -i vga`
 or `glxinfo -B | grep renderer` (NVIDIA or Mesa Intel).
 

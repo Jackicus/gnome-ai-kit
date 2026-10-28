@@ -1,6 +1,6 @@
 {
   "name": "gnome-ext",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Skills shared by the GNOME Shell extensions beside gnome-ai-kit: fix-bug, review-pass, nested-shell, release, doctor, screenshots, ego-review, port-shell-version, hig-polish, readme, pull, releases, simplify-pass",
   "author": {
     "name": "Jackicus"

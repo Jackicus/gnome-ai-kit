@@ -19,7 +19,7 @@
   ever removes another's. The script is the kit's, the same in every repository. The
   shipped `extension.js` imports `lib/app.js` once, as an install
   should.
-- **No `GTypeName`.** GObject type names outlive modules, and Shell 50 has GJS name an
+- **No `GTypeName`.** GObject type names outlive modules, and GJS names an
   unnamed class after its module's path: `Gjs_lib_bar_MediaControlsBar` installed,
   `Gjs_lib-<stage>_bar_MediaControlsBar` under staging, so every load after an edit
   registers apart by itself. A hand-set `GTypeName` (or a per-load suffix helper) is what
@@ -32,8 +32,8 @@
 - **Never hardcode the repo path**, and never derive one from `import.meta.url`: modules
   run from a staging copy under the link and from the install otherwise. Use `this.path`
   / `this.dir`.
-- **`gjs -m -c '…'` fails for any input on gjs 1.88**: `-m` takes the `-c` text for a
-  file name. A one-off module check is a script file run with `gjs -m`.
+- **`gjs -m -c '…'` fails for any input on gjs 1.88 and 1.90**: `-m` takes the `-c` text
+  for a file name. A one-off module check is a script file run with `gjs -m`.
 - **GObject subclasses use `constructor(…)` and `super(…)`**, a shell class still on
   `_init` included: GObject's constructor calls `_init` with what `super()` passed, so
   `ModalDialog.ModalDialog` takes `super({styleClass: …})`. Only a parent whose `_init`
@@ -69,14 +69,29 @@
   finds, and an own `connect` breaks every tracked connection.
 - **`captured-event::key` is wider than a key press**: check
   `event.type() === Clutter.EventType.KEY_PRESS` before asking for a key symbol.
-- **Arrow keys never reach the focus manager while a `pushModal` grab holds.** Under a
-  grab, call `global.focus_manager.navigate_from_event(event)` from the grab actor's
-  `key-press-event`, as the shell's popup menus and dialogs do.
+- **Keyboard focus moves within a focus group, by the group's own key controller**:
+  `global.focus_manager.add_group(actor)` adds one to `actor`, and it navigates under a
+  `pushModal` grab too, as long as the root is inside the grab. Only a **reactive** root
+  gets events: Clutter skips a non-reactive actor's actions. `navigate_from_event()` is
+  gone on 51.
+- **Events go through an actor's actions before its own signal handlers**, in each
+  phase. Slider, PopupMenu and most of the shell take input through actions on 51, so
+  code that must act before a shell widget's own handling adds a controller in the
+  capture phase (`add_action_full(name, Clutter.EventPhase.CAPTURE, controller)`).
+- **Input goes through controllers, not event signals**: `Clutter.KeyController`,
+  `ScrollController`, `MotionController`, `ClickGesture`, `LongPressGesture`, added with
+  `add_action()`. The 51 porting guide deprecates connecting `key-press-event`,
+  `scroll-event` and the other event signals; they still work.
 - **`Main.panel.addToStatusArea(role, …)` holds the role until the indicator is
   destroyed**: a second add under the same role throws. Moving an indicator is a reparent
   between the panel's boxes; destroying it releases the role.
-- **`Main.layoutManager.addChrome()` takes `trackFullscreen` and `affectsStruts` only** on
-  50 (`affectsInputRegion` is gone): anything else throws `Unrecognized parameter`.
+- **`Main.layoutManager.addChrome()` takes `trackFullscreen` and `affectsStruts` only**
+  (`affectsInputRegion` is gone): anything else throws `Unrecognized parameter`.
+- **`PopupMenu.open()` and `close()` take an options object**, `{animate}`: a boolean is
+  read as an empty one, so `close(false)` still animates.
+- **`ui/pointerWatcher.js` and `Clutter.get_default_backend()` are gone on 51**: the
+  cursor is `global.backend.get_cursor_tracker()`, the backend (and its seat)
+  `global.stage.context.get_backend()`.
 - **Activating an item in a `PopupMenuSection` closes the whole menu**: the menu that
   added the item calls `itemActivated`, which closes the top menu, after every
   `activate` emission. An item that must leave it open overrides `activate()` and does
@@ -104,6 +119,12 @@
   load.
 - **Two writes at once on a GIO stream fail** ("Stream has outstanding operation"): queue
   them, one `write_bytes_async` after the last finishes.
+- **A shader is a `Clutter.ShaderEffect` with `vfunc_get_static_snippet()`**:
+  `Shell.GLSLEffect` is gone on 51. Its `set_uniform_float()` takes at most 4 floats per
+  uniform, so a `vec4` array goes to the pipeline itself
+  (`get_pipeline().set_uniform_float(location, 4, count, values)`) in every
+  `vfunc_paint_target()`, since a resize replaces the pipeline: GNOME-Wallpaper-FX's
+  `src/lib/shader.js`.
 - **A dconf database name is a D-Bus object-path element**: letters, digits and
   underscores only. With a hyphen every write fails and `gsettings set` hangs.
 
