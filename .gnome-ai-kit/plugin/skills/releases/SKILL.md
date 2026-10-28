@@ -23,7 +23,7 @@ This reads GitHub and extensions.gnome.org and changes nothing. It is what
      `Release` workflow; `no workflow` means the extension does not carry the kit's
      `release.yml` yet (the `rollout` skill brings it).
    - **e.g.o**: the version-name and upload number extensions.gnome.org serves for GNOME
-     Shell 50, or `not published`.
+     Shell 51, or `not published`.
    - **next**: never released, the current version-name; otherwise a minor step if any
      unreleased pull request's branch is `feat/…`, else a patch step; `-` when nothing is
      unreleased. A proposal: the owner decides.

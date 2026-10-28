@@ -24,7 +24,7 @@ In this order. A section with nothing true to say is left out, never padded.
 4. **The extension's own sections**: what this extension needs explained before it is
    installed or used (AI Usage's providers, Library's artwork sources and
    where-it-opens table, Wallpaper FX's patterns). Each earns its place.
-5. **Requirements**: "GNOME Shell 50" as `shell-version` lists it (never a machine's point
+5. **Requirements**: "GNOME Shell 51" as `shell-version` lists it (never a machine's point
    release), and every runtime need outside GNOME (a player, a CLI signed in, Python 3
    for a scanner). The build needs for a source install go in Install.
 6. **Privacy and network**: required when the extension reads a login, stores a key or
@@ -62,7 +62,7 @@ In this order. A section with nothing true to say is left out, never padded.
 - **Nothing personal**: no home paths, usernames, accounts, tokens or real usage figures,
   in text or in images. Shots come from `gnome-ext:screenshots` with invented data.
 - Every image has alt text that says what it shows; shots live in `docs/screenshots/`.
-- Support is claimed per major version ("GNOME Shell 50"); a performance measurement
+- Support is claimed per major version ("GNOME Shell 51"); a performance measurement
   names its machine (the kit's "Two machines").
 - A badge only if it carries information the text does not; at most one row.
 

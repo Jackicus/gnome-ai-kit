@@ -74,8 +74,10 @@ The same steps exist as single commands for a one-off. Also: `status`, `logs [N]
   bug. Crop it off shots that are kept.
 - **The preferences**: `./scripts/nested.sh run gnome-extensions prefs <uuid>` opens them
   inside the nested session. The Extensions app keeps the `prefs.js` it first imported;
-  after an edit, kill the nested one (the process whose environment names this
-  repository's nested Wayland display) before reopening, never a bare `pkill -f`.
+  after an edit, close the nested one before reopening, by its pid: the process is
+  `gjs`, so find the one whose environment names this repository's nested Wayland
+  display (`/proc/<pid>/environ`) and `kill <pid>`. Never by name: `pkill`, `pkill -x`
+  and `killall` reach the whole machine, through `nested.sh run` too.
 - **Settings**: `./scripts/nested.sh run timeout 5 gsettings --schemadir src/schemas set
   org.gnome.shell.extensions.<name> KEY VALUE` changes the nested session's own settings
   at once, never the user's (`live-session.md`).

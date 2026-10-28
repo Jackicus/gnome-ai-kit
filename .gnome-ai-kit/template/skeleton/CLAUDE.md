@@ -2,7 +2,7 @@
 
 Shared rules for every extension come from gnome-ai-kit: `../CLAUDE.md` and `../.claude/rules/` (loaded with this file), and the `gnome-ext:*` skills. `.claude/kit.sh` pulls the kit at session start, or, with no kit beside this repository, fetches it and prints its rules into the session.
 
-A GNOME Shell extension (UUID `@SLUG@@jackicus`, `version-name` 0.1, shell 50): @DESCRIPTION@
+A GNOME Shell extension (UUID `@SLUG@@jackicus`, `version-name` 0.1, shell 51): @DESCRIPTION@
 
 ## Layout
 

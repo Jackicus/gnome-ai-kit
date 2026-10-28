@@ -4,7 +4,7 @@
 
 ## Requirements
 
-GNOME Shell 50.
+GNOME Shell 51.
 
 ## Privacy and network
 

@@ -1,15 +1,17 @@
 ---
 name: port-shell-version
-description: Bring a GNOME Shell extension to a new GNOME Shell version - read gnome-shell and mutter at the old and new tags, check every shell import and private reach, fix what moved with fallbacks that keep the older versions working, record what was read where, and add the version to metadata.json only once the extension has run on it. Use when a new GNOME release is out or near, when a version is asked for, or when an issue says the extension breaks on one.
+description: Bring a GNOME Shell extension to a new GNOME Shell version - read gnome-shell and mutter at the old and new tags, check every shell import and private reach, fix what moved for the new version alone, record what was read where, and claim the version in metadata.json only once the extension has run on it. Use when a new GNOME release is out or near, when a version is asked for, or when an issue says the extension breaks on one.
 argument-hint: "[the new version, e.g. 51; repository default the current one]"
 ---
 
 Port to: $ARGUMENTS
 
 A version is claimed in `shell-version` only once the extension has **run** on it.
-Reading the sources says what to fix; it does not earn the claim. Library's #8
-(GNOME 51: `Clutter.get_default_backend()` and `navigate_from_event` are gone) is the
-shape of a typical finding.
+Reading the sources says what to fix; it does not earn the claim. `main` claims only the
+versions that boot on the user's machines: once the new one does, the old one leaves
+`shell-version`, and its users keep the last release made for it. No code detects or
+branches on the shell version (`.claude/rules/simplicity.md`). A typical finding: on 51,
+`Clutter.get_default_backend()` and `navigate_from_event()` are gone.
 
 ## 1. The sources, once per machine
 
@@ -25,7 +27,9 @@ git -C $K/gnome-shell tag -l '51.*'      # the tags that exist
 Read a file at a tag with `git -C $K/gnome-shell show 51.0:js/ui/panel.js`, and what
 changed with `git -C $K/gnome-shell diff 50.0 51.0 -- js/ui/panel.js`. The old tag is the
 newest version `shell-version` claims; for a version not yet released, the newest
-`.alpha`/`.beta`/`.rc` tag or `main`, said as such.
+`.alpha`/`.beta`/`.rc` tag or `main`, said as such. The tags are also how to read the
+shell a machine runs: `gresource` (to list the installed `libshell` resources) is often
+not installed, and the tag matching `gnome-shell --version` holds the same files.
 
 ## 2. What the extension depends on
 
@@ -44,11 +48,12 @@ newest version `shell-version` claims; for a version not yet released, the newes
 
 ## 3. Fix
 
-On a branch per version (`port/<N>`), with an issue per breakage. Each fix keeps every
-version still claimed working: feature-test the new API and fall back to the old, never
-branch on a version number unless there is no other way, and say in a comment which
-version each path is for. `make check`. Boot the change on the versions still claimed
-(the nested shell, both machines where they differ: the kit's two-machine rule).
+On a branch per version (`port/<N>`), with an issue per breakage. Each fix is written for
+the new version alone: no feature tests, no fallback to the old API, no comment naming
+versions. `make check`. If `main` holds changes the old version's users should still
+get, release them (`gnome-ext:release`) before the port merges. Boot the change on the
+new version (the nested shell, both machines where they differ: the kit's two-machine
+rule).
 
 ## 4. Record what was read
 
@@ -65,8 +70,9 @@ was booted, with `gnome-shell --version`, in `compatibility.md`. Enable, use eve
 feature the README promises, `stop` + `start` once, and read the logs: no errors with the
 extension's prefix.
 
-If nothing can run N yet, land the fixes, leave `shell-version` alone, and say so in the
-pull request and `compatibility.md`. Never claim a future version.
+Then `shell-version` is `["N"]` alone: the old version goes in the same change.
+If nothing can run N yet, the port waits on a branch, and `main` stays on the version
+that boots. Never claim a future version.
 
 ## 6. Land and report
 
