@@ -86,6 +86,14 @@ The same steps exist as single commands for a one-off. Also: `status`, `logs [N]
 and reads as "no change". `logs 200 --all` shows the D-Bus and portal chatter too. Lines
 with the extension's `[Name]` prefix are its own.
 
+**A JS ERROR removing `gnome-shell-disable-extensions` is harmless.** Every shell, the
+real one and each nested one, creates `$XDG_RUNTIME_DIR/gnome-shell-disable-extensions`
+at startup and deletes it 60 s later or at shutdown (`js/ui/extensionSystem.js`). They
+share the runtime directory, so with two nested shells up, or a stop inside the 60 s,
+one finds it already gone and logs the error. The file only arms the real session's
+crash fallback; nothing of the extension is wrong. A runtime directory of its own would
+also move the Wayland socket, Xwayland's auth and PipeWire, which the mirror needs.
+
 If the mirror will not open (it needs GStreamer's PipeWire plugin), use `--headless` and
 screenshots, and tell the user.
 
