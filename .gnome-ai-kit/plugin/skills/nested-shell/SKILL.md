@@ -17,6 +17,10 @@ lists it with this repository's own commands (from `./scripts/nested.d/`). A rep
 without `./scripts/ext.conf` still runs its own older script: its CLAUDE.md says how it
 differs.
 
+**Not from a git worktree.** A worktree of the extension has the main checkout's UUID, so
+its install and its nested shell: there `nested.sh` (and `dev.sh link`, `install`,
+`reload`, `uninstall`) refuse and name the main checkout. Try the change there.
+
 ## The loop
 
 ```bash
